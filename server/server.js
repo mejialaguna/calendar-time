@@ -1,9 +1,9 @@
+const path = require('path');
 const express = require("express");
 require("dotenv").config(); 
 const cors = require('cors');
 const { dbConnection } = require("./database/config");
 
-// Crear el servidor de express
 // Crear el servidor de express
 const app = express();
 
@@ -19,11 +19,29 @@ app.use( express.static('public') );
 // Lectura y parseo del body
 app.use( express.json() );
 
-// Rutas
-app.use(require('./routes')); 
+// routes
+app.use('/api/auth', require('./routes/auth'));
+app.use(
+  '/api/events',
+  (req, res, next) => {
+    const token = req.headers['authorization'];
+    if (!token) {
+      return res.redirect('/login');
+    }
+    next();
+  },
+  require('./routes/events')
+);
 
 app.get('*', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(path.join(__dirname , './public/index.html'));
+});
+
+app.use((req, res, next) => {
+  res.status(404).json({
+    ok: false,
+    message: 'The requested resource does not exist.',
+  });
 });
 
 // Escuchar peticiones

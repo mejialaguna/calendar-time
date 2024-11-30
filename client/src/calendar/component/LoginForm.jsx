@@ -38,7 +38,7 @@ export const LoginForm = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  console.log('=========== ');
+
   return (
     <form onSubmit={onFormSubmit} className="space-y-4 md:space-y-6" action="#">
       <div>

@@ -1,15 +1,11 @@
 const { Router, response, request } = require("express");
-
-const router = Router();
-
-const { validateToken, fieldValidators } = require("../../../middlewares");
-
 const { check } = require("express-validator");
 
-const getAllEventsRoute = require("./event-routes");
-const createNewEvent = require("./createNewEvent-routes");
-const updateEvent = require("./updateEvent-routes");
-const deleteEvent = require("./deleteEvent-routes");
+const { fieldValidators } = require('../middlewares/fieldValidators');
+const { validateToken } = require('../middlewares/validateJwToken');
+const { getAllEvents, createNewEvent, updateEvent, deleteEvent } = require('../controllers/event-controller');
+
+const router = Router();
 
 /*
     ! event
@@ -24,10 +20,10 @@ const deleteEvent = require("./deleteEvent-routes");
 
 router.use(validateToken); // ! all of the routes need to pass trough the middleware (validateToken) before they can access the routes and only if the token is valid.
 
-router.use("/getAllEvents", getAllEventsRoute);
+router.get('/', getAllEvents);
 
-router.use(
-  "/createEvent",
+router.post(
+  "/",
   [
     // !!! middleware
     check("title", "title is required").not().isEmpty(),
@@ -39,8 +35,8 @@ router.use(
   createNewEvent
 );
 
-router.use(
-  "/updateEvent",
+router.put(
+  "/:id",
   [
     // !!! middleware
     check("title", "title is required").not().isEmpty(),
@@ -51,6 +47,6 @@ router.use(
   ],
   updateEvent
 );
-router.use("/deleteEvent", deleteEvent);
+router.use("/:id", deleteEvent);
 
 module.exports = router;
