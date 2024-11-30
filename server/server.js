@@ -13,10 +13,8 @@ dbConnection();
 // CORS
 app.use(cors())
 
-// Directorio Público
 app.use( express.static('public') );
 
-// Lectura y parseo del body
 app.use( express.json() );
 
 // routes
@@ -34,7 +32,7 @@ app.use(
 );
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname , './public/index.html'));
+  res.sendFile(path.join(__dirname , 'public/index.html'));
 });
 
 app.use((req, res, next) => {
