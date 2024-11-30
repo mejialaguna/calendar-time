@@ -1,8 +1,8 @@
 const path = require('path');
-const express = require("express");
-require("dotenv").config(); 
+const express = require('express');
+require('dotenv').config();
 const cors = require('cors');
-const { dbConnection } = require("./database/config");
+const { dbConnection } = require('./database/config');
 
 // Crear el servidor de express
 const app = express();
@@ -11,13 +11,15 @@ const app = express();
 dbConnection();
 
 // CORS
-app.use(cors())
+app.use(cors());
 
-app.use( express.static('public') );
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use( express.json() );
+// Parse JSON bodies
+app.use(express.json());
 
-// routes
+// API routes
 app.use('/api/auth', require('./routes/auth'));
 app.use(
   '/api/events',
@@ -31,10 +33,17 @@ app.use(
   require('./routes/events')
 );
 
+// Catch-all route for frontend
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname , 'public/index.html'));
+  // Serve index.html only for non-static requests
+  if (!req.path.startsWith('/api') && !req.path.includes('.')) {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
+  } else {
+    res.status(404).send('Not Found');
+  }
 });
 
+// 404 middleware for undefined routes
 app.use((req, res, next) => {
   res.status(404).json({
     ok: false,
@@ -42,7 +51,7 @@ app.use((req, res, next) => {
   });
 });
 
-// Escuchar peticiones
-app.listen( process.env.PORT, () => {
-    console.log(`Servidor corriendo en puerto ${ process.env.PORT }`);
+// Start the server
+app.listen(process.env.PORT, () => {
+  console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
 });
