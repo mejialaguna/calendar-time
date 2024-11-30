@@ -27,7 +27,7 @@ export const calendarSlice = createSlice({
         return event;
       });
     },
-    // console.log('============state >', JSON.parse(JSON.stringify(state)));
+
     onDeleteEvent: (state) => {
       if (state.activeEvent) {
         state.events = state.events.filter((event) => event.messageId !== state.activeEvent.messageId);

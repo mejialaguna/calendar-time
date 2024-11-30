@@ -20,33 +20,41 @@ const router = Router();
 
 router.use(validateToken); // ! all of the routes need to pass trough the middleware (validateToken) before they can access the routes and only if the token is valid.
 
-router.get('/', getAllEvents);
+router.get(
+  '/getAllEvents',
+  [
+    (req, res, next) => {
+      next(); // Pass control to the next middleware/controller
+    },
+  ],
+  getAllEvents
+);
 
 router.post(
-  "/",
+  '/createNewPost',
   [
     // !!! middleware
-    check("title", "title is required").not().isEmpty(),
-    check("notes", "").optional(),
-    check("start", "Please include a valid email").not().isEmpty(),
-    check("end", "Please include a valid email").not().isEmpty(),
+    check('title', 'title is required').not().isEmpty(),
+    check('notes', '').optional(),
+    check('start', 'Please include a valid email').not().isEmpty(),
+    check('end', 'Please include a valid email').not().isEmpty(),
     fieldValidators, // !calling this function after every check
   ],
   createNewEvent
 );
 
 router.put(
-  "/:id",
+  '/updateEvent/:id',
   [
     // !!! middleware
-    check("title", "title is required").not().isEmpty(),
-    check("notes", "").optional(),
-    check("start", "Please include a valid email").not().isEmpty(),
-    check("end", "Please include a valid email").not().isEmpty(),
+    check('title', 'title is required').not().isEmpty(),
+    check('notes', '').optional(),
+    check('start', 'Please include a valid email').not().isEmpty(),
+    check('end', 'Please include a valid email').not().isEmpty(),
     fieldValidators, // !calling this function after every check
   ],
   updateEvent
 );
-router.use("/:id", deleteEvent);
+router.use('/deleteEvent/:id', deleteEvent);
 
 module.exports = router;

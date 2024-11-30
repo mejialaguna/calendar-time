@@ -89,10 +89,6 @@ export const CalendarModal = () => {
     closeDateModal();
   };
 
-  useEffect(() => {
-    console.log(activeEvent);
-  }, [activeEvent]);
-
   const isEventUnchanged = (formValuesEvent, currentActiveEvent) => {
     const formValuesMap = new Map(Object.entries(formValuesEvent));
     return (

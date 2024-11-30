@@ -19,7 +19,7 @@ export const MyCalendar = () => {
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     const isMyEvent = user.userId === event.user._id || user.userId === event.user.userId;
-    // console.log({ isMyEvent })
+
     const style = {
       backgroundColor: isMyEvent ? '#347CF7' : '#465660',
       borderRadius: '0px',

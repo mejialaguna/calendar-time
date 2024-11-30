@@ -24,7 +24,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use(
   '/api/events',
   (req, res, next) => {
-    const token = req.headers['authorization'];
+    const token = req.headers['x-token'];
     if (!token) {
       return res.redirect('/login');
     }
